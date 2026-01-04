@@ -1,0 +1,40 @@
+site_name: Jeronimo Misquita
+site_description: Jeronimo Misquita's Personal Website and Software Engineering blog
+site_url: https://jeronimomisquita.link
+theme:
+  name: material
+  features:
+    - navigation.tabs
+
+  palette:
+    primary: custom
+    accent: deep purple
+
+  favicon: images/logo.png
+
+  font:
+    text: Ubuntu
+
+plugins:
+  - search
+  - blog
+
+extra_css:
+  - stylesheets/extra.css
+
+
+nav:
+  - About Me: about-me.md
+  - System Design:
+      - system-design/replication.md
+  - Book Shelf:
+      - books/readings.md
+  - Projects:
+      - projects/pdf-utilities.md
+  - Blog: blog/index.md
+
+markdown_extensions:
+  - attr_list
+  - pymdownx.emoji:
+      emoji_index: !!python/name:material.extensions.emoji.twemoji
+      emoji_generator: !!python/name:material.extensions.emoji.to_svg
