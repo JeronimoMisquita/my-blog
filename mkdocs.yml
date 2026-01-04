@@ -23,7 +23,7 @@ extra_css:
   - stylesheets/extra.css
 
 nav:
-  - About Me: about-me.md
+  - About Me: index.md
   - System Design:
       - system-design/replication.md
   - Book Shelf:
