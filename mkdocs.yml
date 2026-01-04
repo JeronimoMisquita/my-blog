@@ -1,6 +1,6 @@
 site_name: Jeronimo Misquita
 site_description: Jeronimo Misquita's Personal Website and Software Engineering blog
-site_url: https://JeronimoMisquita.github.io/my-blog/
+site_url: https://JeronimoMisquita.github.io/
 theme:
   name: material
   features:
