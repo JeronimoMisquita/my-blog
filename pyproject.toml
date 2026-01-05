@@ -1,0 +1,7 @@
+[project]
+name = "my-profile"
+version = "0.1.0"
+dependencies = [
+    "mkdocs",
+    "mkdocs-material",
+]
