@@ -5,6 +5,7 @@ theme:
   name: material
   features:
     - navigation.tabs
+    - toc.follow
 
   palette:
     primary: custom
@@ -18,6 +19,10 @@ theme:
 plugins:
   - search
   - blog
+
+
+extra:
+  generator: false
 
 extra_css:
   - stylesheets/extra.css
