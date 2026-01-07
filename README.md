@@ -2,6 +2,8 @@
 
 This project is a personal website created with MkDocs.
 
+Url: https://jeronimomisquita.github.io/my-profile/
+
 ## Prerequisites
 
 - [uv](https://docs.astral.sh/uv/getting-started/installation/)
