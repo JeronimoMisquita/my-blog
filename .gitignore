@@ -1,3 +1,5 @@
 .venv/
 
 /site/
+
+/my_profile.egg-info/

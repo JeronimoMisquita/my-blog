@@ -30,7 +30,7 @@ case "$1" in
         # Activate virtual environment
         source .venv/bin/activate
         # Install/update dependencies
-        uv pip install -p pyproject.toml
+        uv pip install --requirements pyproject.toml
         ;;
     deploy)
         # Activate virtual environment
