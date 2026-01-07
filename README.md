@@ -1,6 +1,6 @@
 # my-profile
 
-This project is a personal website created with MkDocs.
+My personal profile.
 
 Url: https://jeronimomisquita.github.io/my-profile/
 
