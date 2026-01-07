@@ -1,10 +1,11 @@
+/* #42102d; */
 :root  > * {
-  --md-primary-fg-color:        #182C61;
+  --md-primary-fg-color:        #2d0a1f;  
 }
 
-/* .md-header__title {
+.md-header__title {
     font-family: "Ubuntu";
-} */
+}
 
 /* Hide Logos and Icons */
 
