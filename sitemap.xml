@@ -2,46 +2,62 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
     <url>
          <loc>https://JeronimoMisquita.github.io/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/blog/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/blog/2026/01/01/happy-new-year-2026/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/books/readings/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
+    </url>
+    <url>
+         <loc>https://JeronimoMisquita.github.io/health/groceries/</loc>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/projects/pdf-utilities/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/system-design/FollowUps/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/system-design/HelloWorld/</loc>
-         <lastmod>2026-01-07</lastmod>
-    </url>
-    <url>
-         <loc>https://JeronimoMisquita.github.io/system-design/Partitioning/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/system-design/Topic%20Ideas/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
-         <loc>https://JeronimoMisquita.github.io/system-design/replication/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <loc>https://JeronimoMisquita.github.io/system-design/partitioning/overview/</loc>
+         <lastmod>2026-01-10</lastmod>
+    </url>
+    <url>
+         <loc>https://JeronimoMisquita.github.io/system-design/replication/leaderless/</loc>
+         <lastmod>2026-01-10</lastmod>
+    </url>
+    <url>
+         <loc>https://JeronimoMisquita.github.io/system-design/replication/multi-leader/</loc>
+         <lastmod>2026-01-10</lastmod>
+    </url>
+    <url>
+         <loc>https://JeronimoMisquita.github.io/system-design/replication/overview/</loc>
+         <lastmod>2026-01-10</lastmod>
+    </url>
+    <url>
+         <loc>https://JeronimoMisquita.github.io/system-design/replication/single-leader/</loc>
+         <lastmod>2026-01-10</lastmod>
     </url>
     <url>
          <loc>https://JeronimoMisquita.github.io/blog/archive/2026/</loc>
-         <lastmod>2026-01-07</lastmod>
+         <lastmod>2026-01-10</lastmod>
     </url>
 </urlset>

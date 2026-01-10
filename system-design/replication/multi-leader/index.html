@@ -10,9 +10,13 @@
       
       
       
-        <link rel="canonical" href="https://JeronimoMisquita.github.io/blog/archive/2026/">
+        <link rel="canonical" href="https://JeronimoMisquita.github.io/system-design/replication/multi-leader/">
       
       
+        <link rel="prev" href="../single-leader/">
+      
+      
+        <link rel="next" href="../leaderless/">
       
       
         
@@ -23,7 +27,7 @@
     
     
       
-        <title>2026 - Jeronimo Misquita</title>
+        <title>Multi Leader - Jeronimo Misquita</title>
       
     
     
@@ -74,7 +78,7 @@
     <div data-md-component="skip">
       
         
-        <a href="#2026" class="md-skip">
+        <a href="#multi-leader" class="md-skip">
           Skip to content
         </a>
       
@@ -108,7 +112,7 @@
         <div class="md-header__topic" data-md-component="header-topic">
           <span class="md-ellipsis">
             
-              2026
+              Multi Leader
             
           </span>
         </div>
@@ -198,6 +202,8 @@
   
   
   
+    
+  
   
     
     
@@ -205,11 +211,13 @@
   
   
   
+    
+  
   
     
     
-      <li class="md-tabs__item">
-        <a href="../../../system-design/replication/overview/" class="md-tabs__link">
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../overview/" class="md-tabs__link">
           
   
   
@@ -270,7 +278,7 @@
   
   
     <li class="md-tabs__item">
-      <a href="../../" class="md-tabs__link">
+      <a href="../../../blog/" class="md-tabs__link">
         
   
   
@@ -367,24 +375,29 @@
       
   
   
+    
   
   
+  
     
     
     
     
-      
-      
-    
-    
-    <li class="md-nav__item md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" >
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
         
           
-          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="0">
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
             
   
   
@@ -402,7 +415,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2">
             <span class="md-nav__icon md-icon"></span>
             
@@ -417,6 +430,8 @@
                 
   
   
+    
+  
   
   
     
@@ -427,11 +442,11 @@
       
     
     
-    <li class="md-nav__item md-nav__item--nested">
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
       
         
         
-        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" >
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
         
           
           <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
@@ -452,7 +467,7 @@
             <span class="md-nav__icon md-icon"></span>
           </label>
         
-        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="false">
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
           <label class="md-nav__title" for="__nav_2_1">
             <span class="md-nav__icon md-icon"></span>
             
@@ -470,7 +485,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../system-design/replication/overview/" class="md-nav__link">
+      <a href="../overview/" class="md-nav__link">
         
   
   
@@ -498,7 +513,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../system-design/replication/single-leader/" class="md-nav__link">
+      <a href="../single-leader/" class="md-nav__link">
         
   
   
@@ -523,10 +538,37 @@
                 
   
   
+    
   
   
-    <li class="md-nav__item">
-      <a href="../../../system-design/replication/multi-leader/" class="md-nav__link">
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi Leader
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
         
   
   
@@ -542,6 +584,137 @@
   
 
       </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-datacenter-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi datacenter operation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-leader-usecases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi Leader Usecases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi Leader Usecases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clients-with-offline-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clients with offline operation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collaborative-editing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collaborative editing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handling-write-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Write conflicts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling Write conflicts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conflict-avoidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflict avoidance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#converging-towards-a-consistent-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Converging towards a consistent state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-leader-replication-topologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-leader replication topologies
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
     </li>
   
 
@@ -554,7 +727,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../system-design/replication/leaderless/" class="md-nav__link">
+      <a href="../leaderless/" class="md-nav__link">
         
   
   
@@ -640,7 +813,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../../system-design/partitioning/overview/" class="md-nav__link">
+      <a href="../../partitioning/overview/" class="md-nav__link">
         
   
   
@@ -855,7 +1028,7 @@
   
   
     <li class="md-nav__item">
-      <a href="../../" class="md-nav__link">
+      <a href="../../../blog/" class="md-nav__link">
         
   
   
@@ -980,6 +1153,125 @@
     
   
   
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-datacenter-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi datacenter operation
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-leader-usecases" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi Leader Usecases
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Multi Leader Usecases">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#clients-with-offline-operation" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Clients with offline operation
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#collaborative-editing" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Collaborative editing
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handling-write-conflicts" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling Write conflicts
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling Write conflicts">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#conflict-avoidance" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Conflict avoidance
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#converging-towards-a-consistent-state" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Converging towards a consistent state
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#multi-leader-replication-topologies" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Multi-leader replication topologies
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
 </nav>
                   </div>
                 </div>
@@ -987,62 +1279,111 @@
             
           
           
-  <div class="md-content" data-md-component="content">
-    <div class="md-content__inner">
-      <header class="md-typeset">
-        <h1 id="2026">2026</h1>
-      </header>
-      
-        <article class="md-post md-post--excerpt">
-  <header class="md-post__header">
-    
-    <div class="md-post__meta md-meta">
-      <ul class="md-meta__list">
-        <li class="md-meta__item">
-          <time datetime="2026-01-01 00:00:00+00:00">January 1, 2026</time></li>
-        
-        
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="multi-leader">Multi Leader</h1>
+<h2 id="overview">Overview</h2>
+<p>Single leader replication has the drawback that only one node accepts writes. If that node is not reachable no writes are possible.</p>
+<p>Multi-leader replication is a logical extension to this idea where more than one node in the cluster accepts writes.
+Each leader replicates changes to all other nodes. Therefore, a leader node simultaneously also acts as a replica for other leader nodes.</p>
+<h2 id="multi-datacenter-operation">Multi datacenter operation</h2>
+<ul>
+<li>Unique flavour of multi-leader replication</li>
+<li>Each data center has a leader and followers.</li>
+<li>The leader shares updates with its local followers. The leader also replicates updates <strong>async</strong> to leaders in other datacenters.</li>
+<li>Leaders are responsible for conflict resolution when updates from other leaders conflict with its data representation.</li>
+</ul>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>The system operates even if one datacenter fails. Both writes and reads are processed.</li>
+<li>Lower latency on the write path as it is processed by the leader in the geographically closest datacenter. Most latency comes from the request travelling over the public low-trust internet.</li>
+</ul>
+<p>Some databases support multi-leader mode by default. But for most others, external tools are needed e.g. BDR for Postgres, Tungsten Replicator for MySQL, and Golden Gate for Oracle.</p>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Leaders need a conflict resolution process.</li>
+<li>In many databases, multi-leader operation is a retrofitted feature and there can be surprising interactions with other database features like auto-incrementing keys, triggers, and constraints.</li>
+</ul>
+<blockquote>
+<p><strong>NOTE:</strong> Usually multi-leader operation is avoided if possible.</p>
+</blockquote>
+<h2 id="multi-leader-usecases">Multi Leader Usecases</h2>
+<h3 id="clients-with-offline-operation">Clients with offline operation</h3>
+<ul>
+<li>A use case for multi-leader replication is when the application needs to continue to work when it's disconnected from the internet.</li>
+<li>e.g. a calendar app on your phone. You need to be able to see your meetings (read requests) and enter new meetings (write requests) at any time even without an internet connection. The changes are synced when your device comes back online.</li>
+<li>This use case is like multi-datacenter operation where each device is like a datacenter and the connection between them is extremely unreliable.</li>
+</ul>
+<p>CouchDB is a document style NoSQL DB specializing in this mode of operation.</p>
+<h3 id="collaborative-editing">Collaborative editing</h3>
+<ul>
+<li>In collaborative editing (Google Docs), multiple users can edit the same document at the same time.</li>
+<li>Under the hood, user changes are committed to their local leader. Then they are async replicated to a central server and onwards to other users.</li>
+<li>A conflict resolution process is important when clashes occur (discussed later).</li>
+<li>In such editors, the unit of change is usually very small like a single key stroke.</li>
+</ul>
+<p>If this approach was not employed, a user would have to lock the whole document for editing and other users would have to wait when it was locked.</p>
+<h2 id="handling-write-conflicts">Handling Write conflicts</h2>
+<p>Since leaders accept writes to their local instances, any conflicts are detected only much later when changes are async replicated. It may be days after the user actually received a "saved" confirm message.</p>
+<p>This does not happen in single-leader systems. Here, the second write is either blocked, waits for the first one to complete, or fails with an error. The user is forced to retry the second write on top of the first one.</p>
+<h3 id="conflict-avoidance">Conflict avoidance</h3>
+<p>If there are resources that could be overwritten, we could design the system to ensure they are handled by the same leader. For example, a user can be assigned to a single datacenter (closest to him), and reads and writes for that user are handled by the same datacenter, so conflict is avoided across leaders. Other users may be assigned different home datacenters. This strategy avoids concurrent writes across different leaders.</p>
+<h3 id="converging-towards-a-consistent-state">Converging towards a consistent state</h3>
+<p>In a single leader system, if multiple writes are made to a record, the last write reflects the record state.</p>
+<p>In a multi-leader system, in general, there is no such ordering of writes. If replicas simply applied writes in the order they were received, different replicas may end up with a different final state (depending on the replication propagation lag of various write requests from different leaders).
+There must be a way that all replicas arrive at the same final value once all changes are replicated.</p>
+<p><strong>Strategies for achieving convergent conflict resolution:</strong></p>
+<ol>
+<li>Give each write a timestamp. Last timestamp wins, and other older write changes are discarded. - Strategy is prone to data loss (due to non-synced clocks on various nodes).</li>
+<li>Give each write a unique ID. ID is derived from the node id. During conflict, the highest ID wins (a write at a higher-numbered replica always takes precedence over writes that originated at a lower-numbered replica). The strategy is also prone to data loss.</li>
+<li>Somehow merge the values together. e.g. if there is a conflict in writing the title of a doc. Simply append all the possible conflicting titles together, e.g. <code>titleA/titleB</code>.</li>
+<li>Record the conflict in an explicit data structure that preserves all the information and write application code that resolves the conflict at some later time (perhaps by prompting the user).</li>
+</ol>
+<p>Conflicts handled via application code can be resolved in 2 ways:</p>
+<ol>
+<li><strong>On Write</strong> - As soon as the system detects a conflict in the log of replicated changes it calls a conflict resolution handler (Bucardo in Postgres allows you to write a Perl script for this purpose). The handler cannot prompt the user. It runs as a background process and must resolve the conflict quickly.</li>
+<li><strong>On Read</strong> - Details about the conflict are stored in a data structure. The structure is returned when the record is read by an application. The application will prompt the user to manually resolve the conflict and write the final result back to the DB. CouchDB works this way.</li>
+</ol>
+<p>Conflict resolution applies at the level of the record (row) or document (NoSQL DB), not the transaction level. I.e. if a transaction causes multiple writes, each write is a separate conflict that is resolved independently.</p>
+<p>Some research is ongoing for automatically resolving conflicts.</p>
+<ul>
+<li><strong>Conflict-free replicated datatypes (CRDTs)</strong> - Family of data structures for sets, maps, ordered lists, counters etc. that can be concurrently edited by multiple users and automatically resolve conflict in sensible ways.</li>
+<li><strong>Mergeable persistent data structures</strong> - track history explicitly similar to Git version control and use some merge functions.</li>
+<li><strong>Operational transformation</strong> - designed for concurrently editing an ordered list of items such as a list of characters that constitute a text document (used in Google Docs).</li>
+</ul>
+<h2 id="multi-leader-replication-topologies">Multi-leader replication topologies</h2>
+<p>If more than one leader node exists, then replication between leaders can be organized as topologies:</p>
+<ol>
+<li><strong>Circular</strong> - Each leader receives writes from <ins>one</ins> other leader and forwards those writes <ins>along with any of its own</ins> to the next leader in the circular chain.</li>
+<li><strong>All to All</strong> - Every leader forwards writes to every other leader.</li>
+</ol>
+<p>To prevent infinite looping in (1), each node is given an identifier and replicated writes are tagged with all node IDs that they passed through. A node that sees its own ID then discards the replicated write as it applied it earlier.</p>
+<p>In (2) Each leader first accepts writes and saves to local disk (it can have 1 or few sync replicas in local datacenter). It then forwards to other leaders as well as other local datacenter dedicated followers the replicated changes in async mode. Network latency inside datacenter is very low so distribution inside datacenter is handled by that datacenter leader.</p>
+<p><strong>Disadvantage of (1)</strong> If a node goes down in the chain, end-to-end replication stops until the faulty node is repaired. Technically, the topology can also be reconfigured to work around the fault node but it usually is a manual process.</p>
+<p><strong>Disadvantage of (2):</strong> Replication paths may have different latency. Writes may appear in a random order. E.g. an update statement may appear before the insert statement it relied on.
+The problem is similar to the earlier problem of "Consistent prefix reads". To order these writes correctly a technique called <strong>version vectors</strong> is used.</p>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
           
-          <li class="md-meta__item">
-            
-              1 min read
-            
-          </li>
-        
-        
-      </ul>
-      
-    </div>
-  </header>
-  <div class="md-post__content md-typeset">
-    <h2 id="happy-new-year-2026"><a class="toclink" href="../../2026/01/01/happy-new-year-2026/">Happy new year 2026!</a></h2>
-<p>Hope you have a happy and healthy new year !</p>
-
-    
-      <nav class="md-post__action">
-        <a href="../../2026/01/01/happy-new-year-2026/">
-          Continue reading
-        </a>
-      </nav>
-    
-    
-  </div>
-</article>
-      
-      
-        
-          
-
-
-
-<nav class="md-pagination">
-  
-</nav>
-        
-      
-    </div>
-  </div>
-
           
 <script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
         </div>

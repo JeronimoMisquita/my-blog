@@ -1,0 +1,1836 @@
+
+<!doctype html>
+<html lang="en" class="no-js">
+  <head>
+    
+      <meta charset="utf-8">
+      <meta name="viewport" content="width=device-width,initial-scale=1">
+      
+        <meta name="description" content="Jeronimo Misquita's Personal Website and Software Engineering blog">
+      
+      
+      
+        <link rel="canonical" href="https://JeronimoMisquita.github.io/system-design/replication/single-leader/">
+      
+      
+        <link rel="prev" href="../overview/">
+      
+      
+        <link rel="next" href="../multi-leader/">
+      
+      
+        
+      
+      
+      <link rel="icon" href="../../../images/logo.png">
+      <meta name="generator" content="mkdocs-1.6.1, mkdocs-material-9.7.1">
+    
+    
+      
+        <title>Single Leader - Jeronimo Misquita</title>
+      
+    
+    
+      <link rel="stylesheet" href="../../../assets/stylesheets/main.484c7ddc.min.css">
+      
+        
+        <link rel="stylesheet" href="../../../assets/stylesheets/palette.ab4e12ef.min.css">
+      
+      
+
+
+    
+    
+      
+    
+    
+      
+        
+        
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Ubuntu:300,300i,400,400i,700,700i%7CRoboto+Mono:400,400i,700,700i&display=fallback">
+        <style>:root{--md-text-font:"Ubuntu";--md-code-font:"Roboto Mono"}</style>
+      
+    
+    
+      <link rel="stylesheet" href="../../../stylesheets/extra.css">
+    
+    <script>__md_scope=new URL("../../..",location),__md_hash=e=>[...e].reduce(((e,_)=>(e<<5)-e+_.charCodeAt(0)),0),__md_get=(e,_=localStorage,t=__md_scope)=>JSON.parse(_.getItem(t.pathname+"."+e)),__md_set=(e,_,t=localStorage,a=__md_scope)=>{try{t.setItem(a.pathname+"."+e,JSON.stringify(_))}catch(e){}}</script>
+    
+      
+
+    
+    
+  </head>
+  
+  
+    
+    
+    
+    
+    
+    <body dir="ltr" data-md-color-scheme="default" data-md-color-primary="custom" data-md-color-accent="deep-purple">
+  
+    
+    <input class="md-toggle" data-md-toggle="drawer" type="checkbox" id="__drawer" autocomplete="off">
+    <input class="md-toggle" data-md-toggle="search" type="checkbox" id="__search" autocomplete="off">
+    <label class="md-overlay" for="__drawer"></label>
+    <div data-md-component="skip">
+      
+        
+        <a href="#single-leader" class="md-skip">
+          Skip to content
+        </a>
+      
+    </div>
+    <div data-md-component="announce">
+      
+    </div>
+    
+    
+      
+
+<header class="md-header" data-md-component="header">
+  <nav class="md-header__inner md-grid" aria-label="Header">
+    <a href="../../.." title="Jeronimo Misquita" class="md-header__button md-logo" aria-label="Jeronimo Misquita" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    <label class="md-header__button md-icon" for="__drawer">
+      
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M3 6h18v2H3zm0 5h18v2H3zm0 5h18v2H3z"/></svg>
+    </label>
+    <div class="md-header__title" data-md-component="header-title">
+      <div class="md-header__ellipsis">
+        <div class="md-header__topic">
+          <span class="md-ellipsis">
+            Jeronimo Misquita
+          </span>
+        </div>
+        <div class="md-header__topic" data-md-component="header-topic">
+          <span class="md-ellipsis">
+            
+              Single Leader
+            
+          </span>
+        </div>
+      </div>
+    </div>
+    
+      
+    
+    
+    
+    
+      
+      
+        <label class="md-header__button md-icon" for="__search">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        </label>
+        <div class="md-search" data-md-component="search" role="dialog">
+  <label class="md-search__overlay" for="__search"></label>
+  <div class="md-search__inner" role="search">
+    <form class="md-search__form" name="search">
+      <input type="text" class="md-search__input" name="query" aria-label="Search" placeholder="Search" autocapitalize="off" autocorrect="off" autocomplete="off" spellcheck="false" data-md-component="search-query" required>
+      <label class="md-search__icon md-icon" for="__search">
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M9.5 3A6.5 6.5 0 0 1 16 9.5c0 1.61-.59 3.09-1.56 4.23l.27.27h.79l5 5-1.5 1.5-5-5v-.79l-.27-.27A6.52 6.52 0 0 1 9.5 16 6.5 6.5 0 0 1 3 9.5 6.5 6.5 0 0 1 9.5 3m0 2C7 5 5 7 5 9.5S7 14 9.5 14 14 12 14 9.5 12 5 9.5 5"/></svg>
+        
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M20 11v2H8l5.5 5.5-1.42 1.42L4.16 12l7.92-7.92L13.5 5.5 8 11z"/></svg>
+      </label>
+      <nav class="md-search__options" aria-label="Search">
+        
+        <button type="reset" class="md-search__icon md-icon" title="Clear" aria-label="Clear" tabindex="-1">
+          
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M19 6.41 17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z"/></svg>
+        </button>
+      </nav>
+      
+    </form>
+    <div class="md-search__output">
+      <div class="md-search__scrollwrap" tabindex="0" data-md-scrollfix>
+        <div class="md-search-result" data-md-component="search-result">
+          <div class="md-search-result__meta">
+            Initializing search
+          </div>
+          <ol class="md-search-result__list" role="presentation"></ol>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+      
+    
+    
+  </nav>
+  
+</header>
+    
+    <div class="md-container" data-md-component="container">
+      
+      
+        
+          
+            
+<nav class="md-tabs" aria-label="Tabs" data-md-component="tabs">
+  <div class="md-grid">
+    <ul class="md-tabs__list">
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../.." class="md-tabs__link">
+        
+  
+  
+    
+  
+  About Me
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+    
+  
+  
+    
+    
+      
+  
+  
+  
+    
+  
+  
+    
+    
+      <li class="md-tabs__item md-tabs__item--active">
+        <a href="../overview/" class="md-tabs__link">
+          
+  
+  
+  System Design
+
+        </a>
+      </li>
+    
+  
+
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../books/readings/" class="md-tabs__link">
+          
+  
+  
+  Book Shelf
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../projects/pdf-utilities/" class="md-tabs__link">
+          
+  
+  
+  Projects
+
+        </a>
+      </li>
+    
+  
+
+      
+        
+  
+  
+  
+  
+    <li class="md-tabs__item">
+      <a href="../../../blog/" class="md-tabs__link">
+        
+  
+  
+    
+  
+  Blog
+
+      </a>
+    </li>
+  
+
+      
+        
+  
+  
+  
+  
+    
+    
+      <li class="md-tabs__item">
+        <a href="../../../health/groceries/" class="md-tabs__link">
+          
+  
+  
+  Health
+
+        </a>
+      </li>
+    
+  
+
+      
+    </ul>
+  </div>
+</nav>
+          
+        
+      
+      <main class="md-main" data-md-component="main">
+        <div class="md-main__inner md-grid">
+          
+            
+              
+              <div class="md-sidebar md-sidebar--primary" data-md-component="sidebar" data-md-type="navigation" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+
+  
+
+
+<nav class="md-nav md-nav--primary md-nav--lifted" aria-label="Navigation" data-md-level="0">
+  <label class="md-nav__title" for="__drawer">
+    <a href="../../.." title="Jeronimo Misquita" class="md-nav__button md-logo" aria-label="Jeronimo Misquita" data-md-component="logo">
+      
+  
+  <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24"><path d="M12 8a3 3 0 0 0 3-3 3 3 0 0 0-3-3 3 3 0 0 0-3 3 3 3 0 0 0 3 3m0 3.54C9.64 9.35 6.5 8 3 8v11c3.5 0 6.64 1.35 9 3.54 2.36-2.19 5.5-3.54 9-3.54V8c-3.5 0-6.64 1.35-9 3.54"/></svg>
+
+    </a>
+    Jeronimo Misquita
+  </label>
+  
+  <ul class="md-nav__list" data-md-scrollfix>
+    
+      
+      
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../.." class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    About Me
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+        
+        
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--section md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2" id="__nav_2_label" tabindex="">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    System Design
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_2_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    System Design
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--active md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_1" checked>
+        
+          
+          <label class="md-nav__link" for="__nav_2_1" id="__nav_2_1_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Replication
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_1_label" aria-expanded="true">
+          <label class="md-nav__title" for="__nav_2_1">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Replication
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+    
+  
+  
+  
+    <li class="md-nav__item md-nav__item--active">
+      
+      <input class="md-nav__toggle md-toggle" type="checkbox" id="__toc">
+      
+      
+        
+      
+      
+        <label class="md-nav__link md-nav__link--active" for="__toc">
+          
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Single Leader
+  
+
+    
+  </span>
+  
+  
+
+          <span class="md-nav__icon md-icon"></span>
+        </label>
+      
+      <a href="./" class="md-nav__link md-nav__link--active">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Single Leader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+      
+        
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synchronous-vs-asynchronous-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronous vs. Asynchronous Replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-new-followers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting up new followers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handling-node-outages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling node outages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling node outages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-follower-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Follower Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-leader-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Leader Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-is-replication-log-actually-distributed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How is replication log actually distributed ?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How is replication log actually distributed ?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-statement-based-replication-not-used-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Statement based replication (not used now)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-write-ahead-log-wal-shipping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Write-Ahead log (WAL) shipping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-logical-row-based-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Logical (row-based) replication.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-trigger-based-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Trigger based replication
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems-with-replication-lag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problems with Replication Lag
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consistency-guarentees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consistency guarentees
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consistency guarentees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-reading-your-own-writes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Reading Your Own Writes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Reading Your Own Writes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ideas-to-overcome-the-issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas to overcome the issue:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-monotonic-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Monotonic reads
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Monotonic reads">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ideas-to-overcome-the-issue_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas to overcome the issue:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-consistent-prefix-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Consistent prefix reads
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Consistent prefix reads">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ideas-to-overcome-the-issue_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas to overcome the issue:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solutions-to-replication-lag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solutions to replication lag
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../multi-leader/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Multi Leader
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../leaderless/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Leaderless
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+              
+                
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_2_2" >
+        
+          
+          <label class="md-nav__link" for="__nav_2_2" id="__nav_2_2_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Partitioning
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="2" aria-labelledby="__nav_2_2_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_2_2">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Partitioning
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../partitioning/overview/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Overview
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_3" >
+        
+          
+          <label class="md-nav__link" for="__nav_3" id="__nav_3_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Book Shelf
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_3_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_3">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Book Shelf
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../books/readings/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Books I've read
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_4" >
+        
+          
+          <label class="md-nav__link" for="__nav_4" id="__nav_4_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Projects
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_4_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_4">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Projects
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../projects/pdf-utilities/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Pdf utilities
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+    
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../blog/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Blog
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+    
+      
+      
+  
+  
+  
+  
+    
+    
+    
+    
+      
+      
+    
+    
+    <li class="md-nav__item md-nav__item--nested">
+      
+        
+        
+        <input class="md-nav__toggle md-toggle " type="checkbox" id="__nav_6" >
+        
+          
+          <label class="md-nav__link" for="__nav_6" id="__nav_6_label" tabindex="0">
+            
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    Health
+  
+
+    
+  </span>
+  
+  
+
+            <span class="md-nav__icon md-icon"></span>
+          </label>
+        
+        <nav class="md-nav" data-md-level="1" aria-labelledby="__nav_6_label" aria-expanded="false">
+          <label class="md-nav__title" for="__nav_6">
+            <span class="md-nav__icon md-icon"></span>
+            
+  
+    Health
+  
+
+          </label>
+          <ul class="md-nav__list" data-md-scrollfix>
+            
+              
+                
+  
+  
+  
+  
+    <li class="md-nav__item">
+      <a href="../../../health/groceries/" class="md-nav__link">
+        
+  
+  
+  <span class="md-ellipsis">
+    
+  
+    🛒 My Shopping List
+  
+
+    
+  </span>
+  
+  
+
+      </a>
+    </li>
+  
+
+              
+            
+          </ul>
+        </nav>
+      
+    </li>
+  
+
+    
+  </ul>
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+            
+              
+              <div class="md-sidebar md-sidebar--secondary" data-md-component="sidebar" data-md-type="toc" >
+                <div class="md-sidebar__scrollwrap">
+                  <div class="md-sidebar__inner">
+                    
+
+<nav class="md-nav md-nav--secondary" aria-label="Table of contents">
+  
+  
+  
+    
+  
+  
+    <label class="md-nav__title" for="__toc">
+      <span class="md-nav__icon md-icon"></span>
+      Table of contents
+    </label>
+    <ul class="md-nav__list" data-md-component="toc" data-md-scrollfix>
+      
+        <li class="md-nav__item">
+  <a href="#overview" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Overview
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#synchronous-vs-asynchronous-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Synchronous vs. Asynchronous Replication
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#setting-up-new-followers" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Setting up new followers
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#handling-node-outages" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Handling node outages
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Handling node outages">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-follower-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Follower Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-leader-failure" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Leader Failure
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#how-is-replication-log-actually-distributed" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        How is replication log actually distributed ?
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="How is replication log actually distributed ?">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-statement-based-replication-not-used-now" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Statement based replication (not used now)
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-write-ahead-log-wal-shipping" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Write-Ahead log (WAL) shipping
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-logical-row-based-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Logical (row-based) replication.
+      
+    </span>
+  </a>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#4-trigger-based-replication" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        4. Trigger based replication
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#problems-with-replication-lag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Problems with Replication Lag
+      
+    </span>
+  </a>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#consistency-guarentees" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Consistency guarentees
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="Consistency guarentees">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#1-reading-your-own-writes" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        1. Reading Your Own Writes
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="1. Reading Your Own Writes">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ideas-to-overcome-the-issue" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas to overcome the issue:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#2-monotonic-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        2. Monotonic reads
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="2. Monotonic reads">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ideas-to-overcome-the-issue_1" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas to overcome the issue:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+          <li class="md-nav__item">
+  <a href="#3-consistent-prefix-reads" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        3. Consistent prefix reads
+      
+    </span>
+  </a>
+  
+    <nav class="md-nav" aria-label="3. Consistent prefix reads">
+      <ul class="md-nav__list">
+        
+          <li class="md-nav__item">
+  <a href="#ideas-to-overcome-the-issue_2" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Ideas to overcome the issue:
+      
+    </span>
+  </a>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+        
+      </ul>
+    </nav>
+  
+</li>
+      
+        <li class="md-nav__item">
+  <a href="#solutions-to-replication-lag" class="md-nav__link">
+    <span class="md-ellipsis">
+      
+        Solutions to replication lag
+      
+    </span>
+  </a>
+  
+</li>
+      
+    </ul>
+  
+</nav>
+                  </div>
+                </div>
+              </div>
+            
+          
+          
+            <div class="md-content" data-md-component="content">
+              
+              <article class="md-content__inner md-typeset">
+                
+                  
+
+
+
+<h1 id="single-leader">Single Leader</h1>
+<h2 id="overview">Overview</h2>
+<p>In single leader replication</p>
+<ul>
+<li>One node is designated as the <strong>leader</strong>.</li>
+<li>The leader receives all write requests from clients and persists them to its local storage.</li>
+<li>After persisting the data, the leader propagates changes to <strong>follower</strong> nodes via a replication log or change stream.</li>
+<li>Followers apply writes from the leader to their local storage in the same order as processed on the leader.</li>
+</ul>
+<p><strong>Note:</strong>
+Clients can only write to the leader, but may read from either the leader or any follower.</p>
+<p><strong>Common Use Cases:</strong></p>
+<ul>
+<li>Relational databases (e.g. PostgreSQL, MySQL)</li>
+<li>Non-relational databases (e.g. MongoDB, RethinkDB)</li>
+<li>Distributed message brokers (e.g. Kafka, RabbitMQ)</li>
+<li>Some distributed filesystems</li>
+</ul>
+<h2 id="synchronous-vs-asynchronous-replication">Synchronous vs. Asynchronous Replication</h2>
+<p>Some nodes can be marked as sync replicas while others as async replicas.</p>
+<ul>
+<li>After the leader applies a write, it will wait for synchronous replicas to confirm the change before acknowledging the client.<ul>
+<li><strong>Advantage:</strong> If the leader fails, a synchronous follower is guaranteed to have the latest committed data and can be promoted to leader.</li>
+<li><strong>Disadvantage:</strong> If any required synchronous replica is unavailable, the system cannot accept new writes.</li>
+</ul>
+</li>
+<li>It is impractical for all nodes to be synchronous, as this increases write latency and reduces availability (even if one replica is down the system cant accept writes at all).</li>
+<li>The system may also operate with all replicas in async mode<ul>
+<li><strong>Advantage:</strong> Faster write acknowledgments; the system can accept writes even if all followers are offline.</li>
+<li><strong>Disadvantage:</strong> If the leader fails, writes not yet replicated to followers may be lost, meaning durability is not guaranteed even if the client received an acknowledgment.</li>
+</ul>
+</li>
+</ul>
+<h2 id="setting-up-new-followers">Setting up new followers</h2>
+<p>New followers can be added to increase the number of read replicas or to replace failed ones.
+The process can usually be done without any downtime.</p>
+<p><strong>Steps:</strong></p>
+<ol>
+<li>Take a snapshot of the leader DB. This can usually be done without downtime (It's a common task while taking a DB backup). The snapshot also exactly correlates to one point in the leader's replication log. In PostgreSQL, this exact position is called the log sequence number, and in MySQL, it is called binlog coordinates.</li>
+<li>The snapshot is copied to the new follower node.</li>
+<li>The follower connects to the leader and requests all the changes since the snapshot was taken (delta).</li>
+<li>Once the follower has processed the backlog of data changes, it has caught up and begins processing data changes from the leader as they happen.</li>
+</ol>
+<h2 id="handling-node-outages">Handling node outages</h2>
+<h3 id="1-follower-failure">1. Follower Failure</h3>
+<ul>
+<li>The follower disconnects temporarily from the leader, either due to a reboot (e.g. during OS upgrade) or network disruption.</li>
+<li>The follower usually maintains a log of data changes it processed from the leader.</li>
+<li>When the follower comes back, it simply looks up the last transaction that it processed and can request subsequent changes from the leader.</li>
+<li>Once the backlog is processed, the follower has caught up and starts processing updates from the leader as they happen.</li>
+</ul>
+<h3 id="2-leader-failure">2. Leader Failure</h3>
+<p>Quite tricky. In a process called <strong>Failover</strong>:</p>
+<ul>
+<li>One of the followers (usually sync replica) is promoted to leader</li>
+<li>Clients need to be reconfigured to send their writes to the new leader (Either manually or intelligent routing - prefered)</li>
+<li>Other followers need to consume data changes from the new leader</li>
+</ul>
+<p>Failover can be:</p>
+<ul>
+<li>Initiated by admin</li>
+<li>Automated</li>
+</ul>
+<p>In Automated failover:</p>
+<ul>
+<li>Nodes usually send messages back and forth between each other. If any node does not respond for some timeout, it is considered dead (after 30 secs). If the leader is dead, it triggers the automated failover process.</li>
+<li>New leader is chosen by remaining replicas:<ul>
+<li>Either, the node with the latest update from the old leader is made the new leader (minimizes data loss)</li>
+<li>Or The next leader is chosen by a controller node (Controller node was chosen earlier, maybe when the system started)</li>
+</ul>
+</li>
+</ul>
+<blockquote>
+<p><strong>Note:</strong> Getting all remaining nodes to agree on a new leader is a consensus problem.</p>
+</blockquote>
+<p><strong>Failover is fraught with issues:</strong></p>
+<ul>
+<li>In asynchronous replication, the new leader may not have received all writes from the old leader. What if, after the new leader is elected, the old leader comes back? Now what if the new leader has already accepted conflicting writes? You may decide to ignore/drop the writes into the old leader, but that may violate clients' durability expectations.</li>
+<li>Discarding writes may need to be addressed in other systems as well. In an incident at GitHub, an out-of-date MySQL follower was promoted to leader. The database system used auto-incrementing primary keys. The new leader reused primary keys previously assigned by the old leader. The primary keys were referenced in a Redis store. The reuse of primary keys caused a discrepancy between MySQL and Redis, which caused some private data to be disclosed to incorrect users.</li>
+<li>In certain fault scenarios, it can happen that two nodes believe they are both the leader. The situation is called <strong>split brain</strong>, and both leaders may accept writes. If there is no conflict resolution approach, data can get lost or corrupted. As a safety catch in split brain situations, one leader is forced to shut down. We must be careful not to shut down both leaders (which may happen in further error scenarios).</li>
+<li>Discussion exists about what should be the ideal timeout before failover is triggered. If too soon - then if the timeout happened due to an overloaded leader, unnecessary failure can just worsen the situation. If too long - longer time to recovery.</li>
+</ul>
+<p>In general, issues related to node failures, unreliable networks, trade-offs around replica consistency, durability, availability, and latency are fundamental problems in distributed systems.</p>
+<h2 id="how-is-replication-log-actually-distributed">How is replication log actually distributed ?</h2>
+<h3 id="1-statement-based-replication-not-used-now">1. Statement based replication (not used now)</h3>
+<ul>
+<li>Leader logs statements that it executes (In relational db - Insert, update or delete) and forwards them to its followers.</li>
+<li>Each follower processes the statements as if it was received from a client.</li>
+</ul>
+<p><strong>Disadvantages:</strong></p>
+<ul>
+<li>Statements may use non-deterministic functions e.g. <code>NOW()</code> or <code>RAND()</code> that may generate different values on each replica.</li>
+<li>Statements need to be executed in exactly the same order on each replica. This can be challenging when there are multiple concurrently executing transactions.</li>
+<li>Statements that have side effects (e.g. triggers, stored procedures, user-defined functions) may generate different results unless the side effects are exactly deterministic.</li>
+</ul>
+<p><strong>Solution:</strong></p>
+<ul>
+<li>Leader may replace non-deterministic function calls like <code>NOW()</code> with its value before it's logged so replicas use the value directly.</li>
+<li>But there can be a lot of edge cases, therefore this method is not desired. Statement-based replication was used in mSQL before version 5.1. Now they use row-based replication (discussed later).</li>
+</ul>
+<h3 id="2-write-ahead-log-wal-shipping">2. Write-Ahead log (WAL) shipping</h3>
+<ul>
+<li>Every modification is written to an append-only log file. The log is then shipped to followers.</li>
+<li>Followers process the log to rebuild the state on the leader.</li>
+</ul>
+<p><strong>Disadvantage:</strong></p>
+<ul>
+<li>The log describes data changes at a very low level. The log closely relates to the storage format the database uses.</li>
+<li>If the database changes its storage format from one version to another, then it is not possible to run different database versions on the leader and followers.</li>
+<li>Therefore, such database upgrades can require downtime when the database is not operational.</li>
+</ul>
+<p><strong>Note:</strong> If followers and leader <strong>could</strong> run different versions - then usually followers are upgraded one at a time, then Failover is used to make one of the upgraded replicas as the leader. This is no downtime version upgrade.</p>
+<ul>
+<li>WAL replication is used by Postgres, Oracle etc.</li>
+</ul>
+<h3 id="3-logical-row-based-replication">3. Logical (row-based) replication.</h3>
+<ul>
+<li>The system keeps a logical track of records that were inserted, deleted, or updated.</li>
+<li>The logs are very high level logical records and not tied to the storage engine format.</li>
+</ul>
+<p><strong>The log is kept as follows:</strong></p>
+<ul>
+<li>For inserted rows, the log contains new values of the columns.</li>
+<li>For deleted rows, the log contains enough info to uniquely identify the row that was deleted. Usually, it's the primary key logged. If there is no primary key, then old column values are logged.</li>
+<li>For updated rows, the log contains enough info to identify the row that changed and the new changed values.</li>
+<li>A transaction that modifies several rows generates several log records followed by a record indicating the transaction was committed.</li>
+</ul>
+<p><strong>Advantages:</strong></p>
+<ul>
+<li>The log is decoupled from storage engine internals and format; therefore, the leader and followers can run different versions.</li>
+<li>The logs can even be processed by external systems to build custom indexes, caches or a data warehouse. This technique is called <strong>change data capture</strong>.</li>
+</ul>
+<h3 id="4-trigger-based-replication">4. Trigger based replication</h3>
+<p>Used when more flexibility is needed compared to other approaches:</p>
+<ol>
+<li>You want to replicate only a subset of the data</li>
+<li>You want to replicate from one database to another</li>
+<li>You need conflict resolution logic</li>
+</ol>
+<p>For these use cases, you want to move replication up to the application layer.</p>
+<ul>
+<li>Many relational DBs have Triggers and stored procedures. These are leveraged.</li>
+<li>A trigger lets you register custom application code that's executed when a data change happens (write operation). The trigger can write some data into a separate table when such changes happen. This new table can be read by an external process which can replicate the data change to another system. Databus for Oracle and Bucardo for Postgres work like this.</li>
+<li>Oracle GoldenGate reads database logs directly and makes data changes available for an application to consume.</li>
+</ul>
+<p>Trigger-based replication is more manual (prone to bugs, has higher setup overhead) compared to database inbuilt replication. But still useful for some cases.</p>
+<h2 id="problems-with-replication-lag">Problems with Replication Lag</h2>
+<p>In leader-based replication, writes go to the leader and reads to followers.</p>
+<p>Its ideal when:</p>
+<ol>
+<li>Data pattern has a small number of writes and a large number of reads.</li>
+<li>Reads are scaled easily by adding more read replicas</li>
+</ol>
+<p>However, for it to work well, most replicas must be async (If all nodes were sync, single node failure may make the whole system un-usable for writes. Multiple sync replicas also add write latency).</p>
+<p>The problem here is that async replicas are <strong>eventually consistent</strong>. At any moment of time, a read query on a replica and the leader may give different results as the replica may be lagging behind.
+The term <strong>"replication lag"</strong> indicates how far the replica is behind the leader.</p>
+<h2 id="consistency-guarentees">Consistency guarentees</h2>
+<h3 id="1-reading-your-own-writes">1. Reading Your Own Writes</h3>
+<p><strong>"Read after write consistency"</strong> means:</p>
+<ul>
+<li>Users always see the data they submitted themselves.</li>
+<li>It does not guarantee what other users see regarding updates made by the user at any given moment.</li>
+</ul>
+<p>This consistency guarantee is an important property of a system. Without it, consider a scenario where a user submits data to the leader and then reloads the page (which may be served by a lagging replica). If the user cannot see the data they just updated, it may create the illusion that the submitted data was lost, leading to confusion and a poor user experience.</p>
+<h4 id="ideas-to-overcome-the-issue"><strong>Ideas to overcome the issue:</strong></h4>
+<ol>
+<li>You can simply read from the leader any data that the user may have modified themselves e.g. user profile info. While other users' profiles can be read from replicas.</li>
+<li>If most things the user can modify, then (1) may not be very useful as you will be reading most things from the leader, negating the effect of read scaling via replicas.
+    Another idea is to track the last user update. Then for a minute after the last update direct all read requests to the leader. Then After a minute has elapsed you can read from followers. Obviously, the assumption is that replica catchup is less than a minute. You would need to monitor replication lag and divert read traffic to replicas that have replication lag less than a minute.</li>
+<li>The client can note down its last update. Then include this info in its subsequent read requests. The system can ensure it serves the reads from replicas that have information that is up-to-date at least up until that point in time. The infor abou the last update may not be a timestamp. It could be a logical one like the DB replication log sequence number for the update. Not choosing a time-based value avoids problems with clock drift between frontend and backend.</li>
+</ol>
+<blockquote>
+<p><strong>Note:</strong> If the system is distributed across geographical regions then read queries that need to go to the leader must be routed correctly to the leader datacenter.</p>
+<p><strong>Note:</strong> Approach (3) that involves the client noting down and sharing the last update point may not work if the user can use many devices. A laptop client may not know the last update sequence number of the mobile client and so on.</p>
+</blockquote>
+<h3 id="2-monotonic-reads">2. Monotonic reads</h3>
+<p>Since several replicas can be lagging by different amounts, there can be a case that if a client does multiple read requests (to different replicas) he can see things moving backwards in time.</p>
+<p><strong>E.g.</strong>
+Imagine if an app is incrementing a counter and saving to the DB.
+Read requests on replicas could return:</p>
+<ul>
+<li>Query 1 - Replica 1 says count = 100 (replica lag 1s)</li>
+<li>Query 2 - Replica 2 says count = 50 (replica lag 100 s)</li>
+</ul>
+<p><strong>"Monotonic read"</strong> guarantee means that a client may see outdated data, but subsequent read requests should never see older data than what was previously read. I.e. one cannot see data backwards in time.</p>
+<h4 id="ideas-to-overcome-the-issue_1"><strong>Ideas to overcome the issue:</strong></h4>
+<p>User's can always make queries to the same read replica. Different users may query different replicas. A user's replica may be chosen using a hash of the user ID rather than randomly. If a replica fails, another replica must be chosen (the replacement replica must have =&lt; lag of the one that failed).</p>
+<h3 id="3-consistent-prefix-reads">3. Consistent prefix reads</h3>
+<p>Imagine if there are 2 DB shards. Shard 1 has a leader and followers. Shard 2 has a leader and followers.
+Even if "Monotonic read" consistency is guaranteed inside a Shard, issues can occur while querying across Shards.</p>
+<p><strong>E.g.</strong>
+Client A writes to leader of shard 1: "How far in future can you see Mr Cake".
+Client B responds to leader of shard 2: "10 mins in future"</p>
+<p>3rd party client C needs to query both shards 1 and 2 to see the whole conversation. He queries replicas. He may see B's response before A's question.</p>
+<p>This issue happens because client A and client B interactions are causally related.</p>
+<p><strong>"Consistent prefix"</strong> guarantee means if writes appear in some order, then anyone reading those writes must also read data in the same order.
+This issue is quite common in sharded or partitioned databases. Partitions operate independently and there is no global ordering of writes between the partitions.</p>
+<h4 id="ideas-to-overcome-the-issue_2"><strong>Ideas to overcome the issue:</strong></h4>
+<p>Write causally related data to the same partition. There are also algorithms (discussed later) that keep track of causal dependencies across shards/partitions.</p>
+<h2 id="solutions-to-replication-lag">Solutions to replication lag</h2>
+<ol>
+<li>For some usecases large lag may not be an issue in some systems.</li>
+<li>For other usecases stronger guarantees can be provided by changing app behaviour as discussed in Reading your own writes, monotonic read and consistent prefix reads.</li>
+<li>Some databases aim to provide stronger guarantees via distributed transactions. But many distributed databases decided to abandon them claiming transactions are too expensive in terms of performance and availability and asserting that eventual consistent systems are inevitable in a scalable system.</li>
+</ol>
+
+
+
+
+
+
+
+
+
+
+
+
+                
+              </article>
+            </div>
+          
+          
+<script>var target=document.getElementById(location.hash.slice(1));target&&target.name&&(target.checked=target.name.startsWith("__tabbed_"))</script>
+        </div>
+        
+      </main>
+      
+        <footer class="md-footer">
+  
+  <div class="md-footer-meta md-typeset">
+    <div class="md-footer-meta__inner md-grid">
+      <div class="md-copyright">
+  
+  
+</div>
+      
+    </div>
+  </div>
+</footer>
+      
+    </div>
+    <div class="md-dialog" data-md-component="dialog">
+      <div class="md-dialog__inner md-typeset"></div>
+    </div>
+    
+    
+    
+      
+      
+      <script id="__config" type="application/json">{"annotate": null, "base": "../../..", "features": ["navigation.tabs", "toc.follow"], "search": "../../../assets/javascripts/workers/search.2c215733.min.js", "tags": null, "translations": {"clipboard.copied": "Copied to clipboard", "clipboard.copy": "Copy to clipboard", "search.result.more.one": "1 more on this page", "search.result.more.other": "# more on this page", "search.result.none": "No matching documents", "search.result.one": "1 matching document", "search.result.other": "# matching documents", "search.result.placeholder": "Type to start searching", "search.result.term.missing": "Missing", "select.version": "Select version"}, "version": null}</script>
+    
+    
+      <script src="../../../assets/javascripts/bundle.79ae519e.min.js"></script>
+      
+    
+  </body>
+</html>
