@@ -15,3 +15,7 @@
 .md-sidebar--primary .md-icon {
   display: none;
 }
+
+.blue-link {
+    color: #2c09c5 !important; /* Blue */
+}
